@@ -1,15 +1,23 @@
 'use client';
 
-import { Theme, TextInput, Button, Link, InlineNotification , PasswordInput} from '@carbon/react';
-import { UserFollow } from '@carbon/icons-react';
+import {
+  Theme,
+  Form,
+  TextInput,
+  PasswordInput,
+  Button,
+  Link,
+  Tile,
+  IconButton,
+} from '@carbon/react';
+import { UserFollow, Moon, Sun } from '@carbon/icons-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '../ThemeContext'; // Theme context for toggling dark/light mode
 
 const registerSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
     .matches(/[a-z]/, 'Must contain at least one lowercase letter')
@@ -23,27 +31,26 @@ const registerSchema = Yup.object().shape({
 
 export default function Register() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme(); // Get theme state & toggle function
 
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
+    initialValues: { email: '', password: '', confirmPassword: '' },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
       console.log('Registration attempt:', values);
-      // Add your registration logic here
       router.push('/login');
     },
   });
 
   return (
-    <Theme theme="g100">
+    <Theme theme={theme}>
       <main className="auth-container">
-        <div className="auth-form">
-          <h1>Create Account</h1>
-          <form onSubmit={formik.handleSubmit}>
+        <Tile className="auth-form">
+          <div className="header">
+            <h1>Create Account</h1>
+          </div>
+
+          <Form onSubmit={formik.handleSubmit}>
             <div className="form-group">
               <TextInput
                 id="email"
@@ -76,14 +83,11 @@ export default function Register() {
               <Button type="submit" renderIcon={UserFollow}>
                 Register
               </Button>
-              <Link href="/login">
-                Already have an account? Sign in here
-              </Link>
+              <Link href="/login">Already have an account? Sign in here</Link>
             </div>
-          </form>
-        </div>
+          </Form>
+        </Tile>
       </main>
-      
     </Theme>
   );
 }

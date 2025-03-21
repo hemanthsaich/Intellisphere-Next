@@ -43,3 +43,32 @@
   padding: 2rem;
   text-align: center;
 }
+
+.batchActionsContainer {
+  display: flex;
+  align-items: center; 
+  justify-content: flex-start; 
+  gap: 12px; 
+  padding: 10px 20px;
+  background-color: #0c0c0c;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.batchActionsText {
+  font-size: 14px;
+  margin-right: 20px; 
+}
+
+.batchActionsContainer button {
+  margin-right: 0; 
+}
+
+.batchActionsContainer button:last-child {
+  margin-right: 0; 
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px; 
+}

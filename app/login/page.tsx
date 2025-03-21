@@ -1,42 +1,47 @@
 'use client';
 
-import { Theme, TextInput, Button, Link, InlineNotification , PasswordInput} from '@carbon/react';
-import { View, Login as LoginIcon } from '@carbon/icons-react';
+import {
+  Form,
+  Theme,
+  TextInput,
+  Button,
+  Link,
+  PasswordInput,
+  IconButton,
+  Tile,
+} from '@carbon/react';
+import { Login as LoginIcon, Moon, Sun } from '@carbon/icons-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '../ThemeContext'; // Import global theme context
 
 const loginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
+  password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
 });
 
 export default function Login() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme(); // Use global theme
 
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
+    initialValues: { email: '', password: '' },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
       console.log('Login attempt:', values);
-      // Add login logic here
       router.push('/dashboard');
     },
   });
 
   return (
-    <Theme theme="g100">
+    <Theme theme={theme}>
       <main className="auth-container">
-        <div className="auth-form">
-          <h1>Sign in</h1>
-          <form onSubmit={formik.handleSubmit}>
+        <Tile className="auth-form">
+          <div className="header">
+            <h1>Sign in</h1>
+          </div>
+          <Form onSubmit={formik.handleSubmit}>
             <div className="form-group">
               <TextInput
                 id="email"
@@ -60,12 +65,10 @@ export default function Login() {
               <Button type="submit" renderIcon={LoginIcon}>
                 Login
               </Button>
-              <Link href="/register">
-                Don't have an account? Register here
-              </Link>
+              <Link href="/register">Don't have an account? Register here</Link>
             </div>
-          </form>
-        </div>
+          </Form>
+        </Tile>
       </main>
     </Theme>
   );
